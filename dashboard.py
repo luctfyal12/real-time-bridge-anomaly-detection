@@ -23,7 +23,7 @@ try:
     DB_URL = st.secrets["database"]["url"]
 except (KeyError, FileNotFoundError):
     DB_URL = os.environ.get("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/timeseries")
-REFRESH_INTERVAL = 30        # seconds
+REFRESH_INTERVAL = 5         # seconds
 TIME_WINDOW_MINUTES = 30     # show last N minutes of data on charts
 
 # Color palette
