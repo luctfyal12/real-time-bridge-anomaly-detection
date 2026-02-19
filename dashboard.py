@@ -23,7 +23,7 @@ try:
     DB_URL = st.secrets["database"]["url"]
 except (KeyError, FileNotFoundError):
     DB_URL = os.environ.get("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/timeseries")
-REFRESH_INTERVAL = 5         # seconds
+REFRESH_INTERVAL = 30        # seconds
 TIME_WINDOW_MINUTES = 30     # show last N minutes of data on charts
 
 # Color palette
@@ -592,6 +592,6 @@ live_dashboard()
 # Footer
 st.markdown(f"""
 <div style="text-align:center;padding:20px 0 8px;color:{C['muted']};font-size:0.72rem;">
-    Dashboard by LuctAuto-refresh {REFRESH_INTERVAL}s
+    Dashboard by Luctfy Alkatiri Moehtar · Auto-refresh {REFRESH_INTERVAL}s
 </div>
 """, unsafe_allow_html=True)
