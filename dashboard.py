@@ -184,8 +184,8 @@ def get_engine():
     return create_engine(DB_URL)
 
 
-def fetch_latest(engine, window_min=TIME_WINDOW_MINUTES):
-    """Fetch scored readings from the last N minutes for charts."""
+def fetch_latest(engine, limit=500):
+    """Fetch the latest scored readings for charts."""
     q = text(f"""
         SELECT id, timestamp,
                strain_microstrain, deflection_mm, vibration_ms2,
@@ -195,12 +195,12 @@ def fetch_latest(engine, window_min=TIME_WINDOW_MINUTES):
                is_anomaly, anomaly_score, bridge_mood_meter
         FROM bridge_dataset
         WHERE is_anomaly IS NOT NULL
-          AND timestamp >= NOW() - INTERVAL '{window_min} minutes'
-        ORDER BY timestamp ASC
+        ORDER BY id DESC
+        LIMIT {limit}
     """)
     with engine.connect() as conn:
         df = pd.read_sql(q, conn)
-    return df.reset_index(drop=True)
+    return df.sort_values("id").reset_index(drop=True)
 
 
 def fetch_kpis(engine):
@@ -592,6 +592,6 @@ live_dashboard()
 # Footer
 st.markdown(f"""
 <div style="text-align:center;padding:20px 0 8px;color:{C['muted']};font-size:0.72rem;">
-    Bridge Anomaly Detection · IsolationForest + PostgreSQL + Streamlit · Auto-refresh {REFRESH_INTERVAL}s
+    Dashboard by LuctAuto-refresh {REFRESH_INTERVAL}s
 </div>
 """, unsafe_allow_html=True)
