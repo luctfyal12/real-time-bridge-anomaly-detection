@@ -253,9 +253,9 @@ def base_layout(height=320):
         xaxis=dict(
             gridcolor=C["grid"], gridwidth=1,
             zeroline=False, showline=False,
-            tickfont=dict(size=10),
-            tickformat="%H:%M:%S",
-            dtick=60000,  # 1 minute in milliseconds
+            tickfont=dict(size=9),
+            tickformat="%d %b\n%H:%M",
+            nticks=8,
         ),
         yaxis=dict(
             gridcolor=C["grid"], gridwidth=1,
