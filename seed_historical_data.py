@@ -7,10 +7,12 @@ The remaining 30% is reserved for real-time replay by bridge_realtime_engine.py.
 import pandas as pd
 from sqlalchemy import create_engine
 import sys
+import os
 import time
 
 
-DB_URL = "postgresql://postgres:postgres@localhost:5432/timeseries"
+# Database: reads DATABASE_URL env var (Supabase), falls back to localhost
+DB_URL = os.environ.get("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/timeseries")
 CSV_PATH = "bridge_dataset.csv"
 TABLE_NAME = "bridge_dataset"
 CHUNK_SIZE = 5000

@@ -17,16 +17,23 @@ from sklearn.impute import SimpleImputer
 import time
 import signal
 import sys
+import os
 from datetime import datetime
+from urllib.parse import urlparse
 
 
+# Database: reads DATABASE_URL env var (Supabase), falls back to localhost
+_db_url = os.environ.get("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/timeseries")
+_parsed = urlparse(_db_url)
 DB_CONFIG = {
-    "dbname": "timeseries",
-    "host": "localhost",
-    "user": "postgres",
-    "password": "postgres",
-    "port": 5432,
+    "dbname": _parsed.path.lstrip("/") or "timeseries",
+    "host": _parsed.hostname or "localhost",
+    "user": _parsed.username or "postgres",
+    "password": _parsed.password or "postgres",
+    "port": _parsed.port or 5432,
 }
+if _parsed.hostname and _parsed.hostname != "localhost":
+    DB_CONFIG["sslmode"] = "require"
 
 # Features used for anomaly detection (multivariate)
 FEATURE_COLUMNS = [

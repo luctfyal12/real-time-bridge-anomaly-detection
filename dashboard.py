@@ -8,6 +8,7 @@ Launch:  streamlit run dashboard.py
 import streamlit as st
 import pandas as pd
 import numpy as np
+import os
 import plotly.graph_objects as go
 from sqlalchemy import create_engine, text
 from datetime import datetime
@@ -17,7 +18,11 @@ from datetime import datetime
 #  CONFIG
 # ═══════════════════════════════════════════════════════════════
 
-DB_URL = "postgresql://postgres:postgres@localhost:5432/timeseries"
+# Database: 1) Streamlit secrets, 2) DATABASE_URL env var, 3) localhost fallback
+try:
+    DB_URL = st.secrets["database"]["url"]
+except (KeyError, FileNotFoundError):
+    DB_URL = os.environ.get("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/timeseries")
 REFRESH_INTERVAL = 5         # seconds
 TIME_WINDOW_MINUTES = 30     # show last N minutes of data on charts
 
